@@ -9,16 +9,16 @@ sequenced genomes.
 
 The scripts are making it easy to execute what are desribed at various pages.
 Important pages are:
-http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=IncorporatingRNAseq.Tophat
-http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=Augustus.Augustus
-http://www.repeatmasker.org/
+- http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=IncorporatingRNAseq.Tophat
+- http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=Augustus.Augustus
+- http://www.repeatmasker.org/
 
 Most of the software used in these scripts are installed with LPM.
-http://www.kasahara.ws/lpm/
+- http://www.kasahara.ws/lpm/
 
-# Input files
-Jin03.fa (the genome not included)
-RNA-seq-list (the list of RNA-seq data; index number and description)
+## Input files
+* Jin03.fa (the genome not included)
+* RNA-seq-list (the list of RNA-seq data; index number and description)
 The raw RNA-seq data are organized in subdirectories as by index numbers
 ```
 Sample_idx1/
@@ -26,36 +26,55 @@ Sample_idx1/
   idx1_ATCACG_L006_R2_001.fastq.gz
 ```
 
-# RepeatMask
+## RepeatMask
 Masking repeats is recommended by Augustus author. 
 To mask repeat properly, we need a proper species specific repeat profile.
 
-## Repeat Modeling
+### Repeat Modeling
 * Jin3RM.job
 * Jin3RM2.job
 
-## Actual Repeat Masking
+### Actual Repeat Masking
 * repeatmask2.job
-note the directory name RM_65194.FriMay90932462014 should be changed to
+Note the directory name RM_65194.FriMay90932462014 should be changed to
 what was made by repeat modeler.
 
-# CEGMA
+## CEGMA
 * cegma03.job
 
-# Interleve read1 and read2 of RNA-seq while trimming the adapter sequence
-* utadapt-pe.c
 
-# rename the tail of readname from /1,/2 to -1,-2
+## Interleve read1 and read2 of RNA-seq while trimming the adapter sequence
+* cutadapt-pe.c
+
+## rename the readname from /1,/2 to -1,-2
 * rename-aug.job
 
-# Iterative Augustus
-## Map the RNA-seq data to the masked genome with tophat
+## Iterative Augustus
+### Initial training of Augustus with CEGMA results
+    new_species.pl --species=Jinfusca3   
+* etrain.job
+
+We need to train augustus with some data. At begining just use the
+ultra conserved genes from cegma.
+
+### Map the RNA-seq data to the masked genome with tophat
 * tophat2masked.job
 
-## extract exon junctions
-## map the RNA-seq to exon junctions using bowtie2
+### generate hints file from the mapped data
+* genhint.job
 
-## Map protein sequence data to genome using exonerate
-## construct combined hint data.
-## split genome
-## Run Augustus on split genome
+### extract exon junctions
+* create_exex_junction.sh 
+
+### map the RNA-seq to exon junctions using bowtie2
+* bowtie2exexj.job
+
+### Map protein sequence data to genome using exonerate
+* exonerateAt.job
+* exoneratePp.job
+### construct combined hint data.
+* mergehints.job
+### split genome
+* flatsplitbysize.rb
+### Run Augustus on split genome
+* s22baugustus3.job
