@@ -18,32 +18,40 @@ http://www.kasahara.ws/lpm/
 
 # Input files
 Jin03.fa (the genome not included)
-RNA-seq data
-RNA-seq-list
+RNA-seq-list (the list of RNA-seq data; index number and description)
+The raw RNA-seq data are organized in subdirectories as by index numbers
+```
+Sample_idx1/
+  idx1_ATCACG_L006_R1_001.fastq.gz
+  idx1_ATCACG_L006_R2_001.fastq.gz
+```
 
 # RepeatMask
 Masking repeats is recommended by Augustus author. 
 To mask repeat properly, we need a proper species specific repeat profile.
-## Repeat Modeling
 
-Jin3RM.job
-Jin3RM2.job
+## Repeat Modeling
+* Jin3RM.job
+* Jin3RM2.job
+
 ## Actual Repeat Masking
-repeatmask2.job
+* repeatmask2.job
 note the directory name RM_65194.FriMay90932462014 should be changed to
 what was made by repeat modeler.
 
 # CEGMA
-cegma03.job
+* cegma03.job
 
 # Interleve read1 and read2 of RNA-seq while trimming the adapter sequence
-cutadapt-pe.c
+* utadapt-pe.c
 
 # rename the tail of readname from /1,/2 to -1,-2
-rename-aug.job
+* rename-aug.job
 
 # Iterative Augustus
 ## Map the RNA-seq data to the masked genome with tophat
+* tophat2masked.job
+
 ## extract exon junctions
 ## map the RNA-seq to exon junctions using bowtie2
 
