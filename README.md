@@ -66,8 +66,32 @@ At begining just use the ultra conserved genes from cegma.
 The instruction was given at:
 - http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=Augustus.CEGMATraining
 
+
+### Prepare Bowtie2 index
+* bb.job
+
+Because tophat2 use bowtie2, bowtie2 index should prepared in advance.
+This is run as a single process, while actuall mapping process can be run
+in parallel, using the same index and separate query RNA-seq data.
+While this produces index files starting Jin03_m_db,
+tophat process requires presence of Jin03_m_db.fa
+
+    ln Jin03.masked.fa Jin03_m_db.fa
+
+should be performed.
+
 ### Map the RNA-seq data to the masked genome with tophat
 * tophat2masked.job
+
+* filter.job
+
+Select good mapping reads. (--paired for paired end read data)
+This phase is run independently for each index of RNA-seq data.
+
+* merge.job
+
+Merge the filtered data and sort. Because we merge, we have to
+wait all filer job finished and run as a separte single job.
 
 ### Generate hints file from the mapped data
 * genhint.job
@@ -95,11 +119,19 @@ split/augsp.job was written.
 
 ### extract exon junctions
 * create_exex_junction.sh 
+* s7create_exex_junction.sh
 
 Step 7 
 
 ### Map the RNA-seq to exon junctions using bowtie2
 * bowtie2exexj.job
+
+* s8bowtie2exexj.job
+* s9join.job
+* s10filter.job
+* s12augustus2.job
+* s13joingff.job
+* s14togbandretrain.job
 
 ### Map protein sequence data to genome using exonerate
 * exonerateAt.job
@@ -110,3 +142,22 @@ Step 7
 
 ### Run Augustus on split genome
 * s22baugustus3.job
+
+* s23bjoingff.job
+
+Combine the split prediction over the genome.
+```
+s22augustus3.job
+s23joingff.job
+```
+These output in gff2 format whereas the above is configured to write gff3 format.
+
+## unexplained
+```
+exclude_intron_map.sh
+discard_intron_map.job
+merge2.job
+s15optimize_augustus.job
+exonerate-merge-to-hints.job
+rm2hints.job
+```
