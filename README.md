@@ -13,6 +13,12 @@ Important pages are:
 - http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=Augustus.Augustus
 - http://www.repeatmasker.org/
 
+Most step are encupsulated in job scripts that can be run in a SGE/UGE environment,
+while some are left for command line execution.
+The job scripts were run on the phase 1 system in NIG super computer. Some parameters,
+especially job parameters regarding parallel environment need adjustment to the
+system you use.
+
 Most of the software used in these scripts are installed with LPM.
 - http://www.kasahara.ws/lpm/
 
@@ -66,8 +72,31 @@ The instruction was given at:
 ### Generate hints file from the mapped data
 * genhint.job
 
+### Split genome
+* flatsplitbysize.rb
+```
+mkdir -p split
+cd split
+cp -p ../Jin03_m_db.fa .
+ruby ../flatsplitbysize.rb Jin03_m_db.fa 1000000
+```
+Split the genome fasta file in a chunk of 1 Mb.
+When the scaffold is large one scaffold is in the split file,
+while multiple scaffold is put in a single file until the cumulative
+size read 1 Mb.
+
+### perform 1st augustus run
+* augustus1.job
+* split/augsp.job
+
+Initially, augustus1.job was used. This took a day or more.
+After realizing that the genome may split and augustus is run in parallel
+split/augsp.job was written.
+
 ### extract exon junctions
 * create_exex_junction.sh 
+
+Step 7 
 
 ### Map the RNA-seq to exon junctions using bowtie2
 * bowtie2exexj.job
@@ -78,9 +107,6 @@ The instruction was given at:
 
 ### Construct combined hint data.
 * mergehints.job
-
-### Split genome
-* flatsplitbysize.rb
 
 ### Run Augustus on split genome
 * s22baugustus3.job
