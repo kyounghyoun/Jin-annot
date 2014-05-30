@@ -7,11 +7,40 @@ This repository holds scripts and programs that was used to
 annotate a plant genome using RNA-seq and annotation of other 
 sequenced genomes.
 
+The scripts are making it easy to execute what are desribed at various pages.
+Important pages are:
+http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=IncorporatingRNAseq.Tophat
+http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=Augustus.Augustus
+http://www.repeatmasker.org/
+
+Most of the software used in these scripts are installed with LPM.
+http://www.kasahara.ws/lpm/
+
+# Input files
+Jin03.fa (the genome not included)
+RNA-seq data
+RNA-seq-list
+
 # RepeatMask
+Masking repeats is recommended by Augustus author. 
+To mask repeat properly, we need a proper species specific repeat profile.
 ## Repeat Modeling
+
+Jin3RM.job
+Jin3RM2.job
 ## Actual Repeat Masking
+repeatmask2.job
+note the directory name RM_65194.FriMay90932462014 should be changed to
+what was made by repeat modeler.
 
 # CEGMA
+cegma03.job
+
+# Interleve read1 and read2 of RNA-seq while trimming the adapter sequence
+cutadapt-pe.c
+
+# rename the tail of readname from /1,/2 to -1,-2
+rename-aug.job
 
 # Iterative Augustus
 ## Map the RNA-seq data to the masked genome with tophat
