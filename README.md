@@ -36,17 +36,17 @@ To mask repeat properly, we need a proper species specific repeat profile.
 
 ### Actual Repeat Masking
 * repeatmask2.job
+
 Note the directory name RM_65194.FriMay90932462014 should be changed to
 what was made by repeat modeler.
 
 ## CEGMA
 * cegma03.job
 
-
 ## Interleve read1 and read2 of RNA-seq while trimming the adapter sequence
 * cutadapt-pe.c
 
-## rename the readname from /1,/2 to -1,-2
+## Rename the readname from /1,/2 to -1,-2
 * rename-aug.job
 
 ## Iterative Augustus
@@ -54,27 +54,33 @@ what was made by repeat modeler.
     new_species.pl --species=Jinfusca3   
 * etrain.job
 
-We need to train augustus with some data. At begining just use the
-ultra conserved genes from cegma.
+We need to train augustus with some data. 
+At begining just use the ultra conserved genes from cegma. 
+
+The instruction was given at:
+- http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=Augustus.CEGMATraining
 
 ### Map the RNA-seq data to the masked genome with tophat
 * tophat2masked.job
 
-### generate hints file from the mapped data
+### Generate hints file from the mapped data
 * genhint.job
 
 ### extract exon junctions
 * create_exex_junction.sh 
 
-### map the RNA-seq to exon junctions using bowtie2
+### Map the RNA-seq to exon junctions using bowtie2
 * bowtie2exexj.job
 
 ### Map protein sequence data to genome using exonerate
 * exonerateAt.job
 * exoneratePp.job
-### construct combined hint data.
+
+### Construct combined hint data.
 * mergehints.job
-### split genome
+
+### Split genome
 * flatsplitbysize.rb
+
 ### Run Augustus on split genome
 * s22baugustus3.job
