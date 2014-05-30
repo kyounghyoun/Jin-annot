@@ -1,0 +1,19 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -t 1:338
+
+#  This requires that o
+# new_species.pl --species=Jinfusca3
+# and
+# etraining --species=Jinfusca3 
+# is done prior to the execution
+
+unset LANG
+export LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
+
+cd split
+
+#augustus --species=yourSpecies --extrinsicCfgFile=extrinsic.cfg --alternatives-from-evidence=true --hintsfile=hints.2.gff --allow_hinted_splicesites=atac genome.fa > aug2.out
+augustus --species=Jinfusca3 --extrinsicCfgFile=../extrinsic.cfg --alternatives-from-evidence=true --hintsfile=../intron_hints.2.gff --allow_hinted_splicesites=atac Jin03_m_db.fa.$SGE_TASK_ID > aug2.out.$SGE_TASK_ID
+

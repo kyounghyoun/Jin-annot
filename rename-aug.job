@@ -1,0 +1,8 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -pe def_slot 3
+#$ -t 1:10
+
+idx=`head -n $SGE_TASK_ID RNA-seq-list | tail -1 | awk '{print $1;}'`
+zcat Sample_idx$idx.fq.gz | sed -e 's/^\(@.*\) \([12]\).*/\1-\2/'  | gzip > Sample_idx$idx.aug.fq.gz

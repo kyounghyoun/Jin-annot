@@ -1,0 +1,20 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -pe def_slot 4-20
+#$ -t 1:10
+
+# step 8 of http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=IncorporatingRNAseq.Tophat
+species=Jin03
+
+unset LANG
+PATH=$HOME/lcl/opt/augustus/current/scripts/:$HOME/lcl/bin:$PATH
+idx=`head -n $SGE_TASK_ID RNA-seq-list | tail -1 | awk '{print $1;}'`
+#tophat2 -p 4 genome_database rnaseq.fastq
+which bowtie
+bowtie --version
+date
+bowtie -p $NSLOTS --sam ${species}_exex1 <(zcat Sample_idx$idx.aug.fq.gz) > bowtie_exex1_$idx.sam
+samtools view -S -F 4 bowtie_exex1_$idx.sam > bowtie_exex1_$idx.F.sam
+samMap.pl bowtie_exex1_$idx.F.sam map.psl > bowtie.global.$idx.sam
+date

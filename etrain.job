@@ -1,0 +1,12 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+
+## not tested through a job
+
+LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
+
+cegma2gff.pl Jin03cegma.cegma.gff > augustus-cegma-training.gff
+gff2gbSmallDNA.pl augustus-cegma-training.gff Jin03.fa 2000 Jin03genes.raw.gb
+etraining --species=Jinfusca3 Jin03genes.raw.gb 
+

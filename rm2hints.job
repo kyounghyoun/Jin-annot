@@ -1,0 +1,2 @@
+
+sed -e s/similarity/nonexonpart/ -e 's/Target.*/src=RM/' Jin03.fa.out.gff  > repeats.gff

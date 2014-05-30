@@ -1,0 +1,8 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -t 1:400
+
+PATH=$HOME/lcl/bin:$PATH
+
+exonerate --showtargetgff yes --model protein2genome P.patens.V6_filtered_cosmoss_proteins.fas Jin03_m_db.fa --querychunkid $SGE_TASK_ID --querychunktotal 400

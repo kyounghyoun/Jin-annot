@@ -1,0 +1,13 @@
+#!/bin/sh
+#$ -S /bin/sh
+#$ -cwd
+#$ -v PATH
+
+version=03
+
+env
+
+echo -- BuildDatabase --
+BuildDatabase -name Jin$version -engine ncbi Jin$version.fa
+echo -- RepeatModeler --
+RepeatModeler -database Jin$version -engine ncbi

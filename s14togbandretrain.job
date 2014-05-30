@@ -1,0 +1,13 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+
+
+unset LANG
+export LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
+
+cat split/aug2.out.* | join_aug_pred.pl > aug2.gff
+gff2gbSmallDNA.pl aug2.gff Jin03_m_db.fa 10000 augustustrain2.gb 
+randomSplit.pl augustustrain2.gb 500
+etraining --species=Jinfusca3 augustustrain2.gb.train
+

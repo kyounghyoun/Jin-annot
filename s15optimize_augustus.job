@@ -1,0 +1,17 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -pe def_slot 4-40
+#$ -l s_vmem=6G,mem_req=2G
+
+#  This requires that o
+# new_species.pl --species=Jinfusca3
+# and
+# etraining --species=Jinfusca3 
+# is done prior to the execution
+
+unset LANG
+export LD_LIBRARY_PATH=/usr/local/lib64:$LD_LIBRARY_PATH
+
+optimize_augustus.pl --species=Jinfusca3 --cpus=$NSLOTS --rounds=3 augustustrain2.gb.train
+

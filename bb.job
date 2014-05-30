@@ -1,0 +1,11 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -l s_vmem=20G,mem_req=8G
+
+source $HOME/.bashrc
+unset LANG
+hostname
+date
+bowtie2-build Jin03.masked.fa Jin03_m_db
+date

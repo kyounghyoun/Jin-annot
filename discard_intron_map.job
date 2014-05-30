@@ -1,0 +1,18 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+##$ -pe def_slot 1-4
+#$ -t 1:10
+
+unset LANG
+
+idx=`head -n $SGE_TASK_ID RNA-seq-list | tail -1 | awk '{print $1;}'`
+
+
+# step 9 http://bioinf.uni-greifswald.de/bioinf/wiki/pmwiki.php?n=IncorporatingRNAseq.Tophat
+# discard intron containing alignments from the original bam file
+bamtools filter -in Sample_idx${idx}_thm/accepted_hits.s.bam -out Sample_idx${idx}_thm/accepted_hits.noN.bam -script $HOME/lcl/opt/augustus/current/auxprogs/auxBamFilters/operation_N_filter.txt 
+
+# create a bam file with header from the bowtie.global.sam file
+#cat header.txt bowtie.global.*.sam > bowtie.global_h.sam
+#samtools view -bS -o bowtie.global.h.bam bowtie.global_h.sam

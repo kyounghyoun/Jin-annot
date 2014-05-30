@@ -1,0 +1,1 @@
+cat intron_hints.2.gff repeats.gff exonerate.hints > allhints.gff

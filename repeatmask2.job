@@ -1,0 +1,11 @@
+#!/bin/sh
+#$ -S /bin/sh
+#$ -cwd
+#$ -v PATH
+#$ -pe def_slot 4-20
+#$ -l s_vmem=6G
+
+#env
+date
+echo -- RepeatMasker with specific model --
+RepeatMasker -pa $NSLOTS -gff -lib RM_65194.FriMay90932462014/consensi.fa.classified Jin03.fa

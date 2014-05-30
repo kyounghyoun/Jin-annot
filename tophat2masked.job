@@ -1,0 +1,16 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -pe def_slot 4-20
+#$ -t 1:10
+
+unset LANG
+PATH=$HOME/lcl/bin/tophat/:$HOME/lcl/bin:$PATH
+idx=`head -n $SGE_TASK_ID RNA-seq-list | tail -1 | awk '{print $1;}'`
+#tophat2 -p 4 genome_database rnaseq.fastq
+which tophat
+tophat -v
+echo tophat -p $NSLOTS Jin03_m_db Sample_idx$idx.aug.fq.gz
+date
+tophat -p $NSLOTS -o Sample_idx${idx}_thm Jin03_m_db Sample_idx$idx.aug.fq.gz
+date

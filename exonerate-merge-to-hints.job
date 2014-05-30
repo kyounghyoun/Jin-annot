@@ -1,0 +1,3 @@
+cat exonerate??.job.o* > exonerate.out
+exonerate2hints.pl --in=exonerate.out --source=P --out=exonerate.hints
+

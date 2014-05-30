@@ -1,0 +1,11 @@
+#!/bin/bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -pe def_slot 5-20
+unset LANG
+source ~/.bashrc
+
+v=03
+
+cegma -T $NSLOTS --genome Jin$v.fa -o Jin${v}cegma
+
