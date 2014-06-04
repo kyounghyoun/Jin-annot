@@ -41,24 +41,24 @@ To mask repeat properly, we need a proper species specific repeat profile.
 * [Jin3RM2.job](Jin3RM2.job)
 
 ### Actual Repeat Masking
-* repeatmask2.job
+* [repeatmask2.job](repeatmask2.job)
 
 Note the directory name RM_65194.FriMay90932462014 should be changed to
 what was made by repeat modeler.
 
 ## CEGMA
-* cegma03.job
+* [cegma03.job](cegma03.job)
 
 ## Interleave read1 and read2 of RNA-seq while trimming the adapter sequence
-* cutadapt-pe.c
+* [cutadapt-pe.c](cutadapt-pe.c)
 
 ## Rename the readname from /1,/2 to -1,-2
-* rename-aug.job
+* [rename-aug.job](rename-aug.job)
 
 ## Iterative Augustus
 ### Initial training of Augustus with CEGMA results
     new_species.pl --species=Jinfusca3   
-* etrain.job
+* [etrain.job](etrain.job)
 
 We need to train augustus with some data. 
 At begining just use the ultra conserved genes from cegma. 
@@ -68,7 +68,7 @@ The instruction was given at:
 
 
 ### Prepare Bowtie2 index
-* bb.job
+* [bb.job](bb.job)
 
 Because tophat2 use bowtie2, bowtie2 index should prepared in advance.
 This is run as a single process, while actuall mapping process can be run
@@ -81,23 +81,23 @@ tophat process requires presence of Jin03_m_db.fa
 should be performed.
 
 ### Map the RNA-seq data to the masked genome with tophat
-* tophat2masked.job
+* [tophat2masked.job](tophat2masked.job)
 
-* filter.job
+* [filter.job](filter.job)
 
 Select good mapping reads. (--paired for paired end read data)
 This phase is run independently for each index of RNA-seq data.
 
-* merge.job
+* [merge.job](merge.job)
 
 Merge the filtered data and sort. Because we merge, we have to
 wait all filter job finished and run as a separte single job.
 
 ### Generate hints file from the mapped data
-* genhint.job
+* [genhint.job](genhint.job)
 
 ### Split genome
-* flatsplitbysize.rb
+* [flatsplitbysize.rb](flatsplitbysize.rb)
 ```
 mkdir -p split
 cd split
@@ -111,7 +111,7 @@ size reach 1 Mb.
 
 ### Perform 1st augustus run
 * augustus1.job
-* split/augsp.job
+* [split/augsp.job](split/augsp.job)
 
 Initially, augustus1.job was used. This took a day or more.
 After realizing that the genome may split and augustus is run in parallel
@@ -119,17 +119,17 @@ split/augsp.job was written.
 
 ### Extract exon junctions
 * create_exex_junction.sh 
-* s7create_exex_junction.sh
+* [s7create_exex_junction.sh](s7create_exex_junction.sh)
 
 Step 7 
 
 ### Map the RNA-seq to exon junctions using bowtie2
 * bowtie2exexj.job
-* s8bowtie2exexj.job
+* [s8bowtie2exexj.job](s8bowtie2exexj.job)
 
 Map to exon junction database and adjust the coordinate back to the global coordinate.
 
-* discard_intron_map.job
+* [discard_intron_map.job](discard_intron_map.job)
 
 _thm/accepted_hits.noN.bam
 
