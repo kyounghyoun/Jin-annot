@@ -38,7 +38,7 @@ To mask repeat properly, we need a proper species specific repeat profile.
 
 ### Repeat Modeling
 * Jin3RM.job
-* Jin3RM2.job
+* [Jin3RM2.job](Jin3RM2.job)
 
 ### Actual Repeat Masking
 * repeatmask2.job
@@ -49,7 +49,7 @@ what was made by repeat modeler.
 ## CEGMA
 * cegma03.job
 
-## Interleve read1 and read2 of RNA-seq while trimming the adapter sequence
+## Interleave read1 and read2 of RNA-seq while trimming the adapter sequence
 * cutadapt-pe.c
 
 ## Rename the readname from /1,/2 to -1,-2
@@ -91,7 +91,7 @@ This phase is run independently for each index of RNA-seq data.
 * merge.job
 
 Merge the filtered data and sort. Because we merge, we have to
-wait all filer job finished and run as a separte single job.
+wait all filter job finished and run as a separte single job.
 
 ### Generate hints file from the mapped data
 * genhint.job
@@ -107,9 +107,9 @@ ruby ../flatsplitbysize.rb Jin03_m_db.fa 1000000
 Split the genome fasta file in a chunk of 1 Mb.
 When the scaffold is large one scaffold is in the split file,
 while multiple scaffold is put in a single file until the cumulative
-size read 1 Mb.
+size reach 1 Mb.
 
-### perform 1st augustus run
+### Perform 1st augustus run
 * augustus1.job
 * split/augsp.job
 
@@ -117,7 +117,7 @@ Initially, augustus1.job was used. This took a day or more.
 After realizing that the genome may split and augustus is run in parallel
 split/augsp.job was written.
 
-### extract exon junctions
+### Extract exon junctions
 * create_exex_junction.sh 
 * s7create_exex_junction.sh
 
@@ -125,8 +125,18 @@ Step 7
 
 ### Map the RNA-seq to exon junctions using bowtie2
 * bowtie2exexj.job
-
 * s8bowtie2exexj.job
+
+Map to exon junction database and adjust the coordinate back to the global coordinate.
+
+* discard_intron_map.job
+
+_thm/accepted_hits.noN.bam
+
+merge2.job
+
+Discard the intron map data from original mapping.
+
 * s9join.job
 * s10filter.job
 * s12augustus2.job
@@ -137,7 +147,19 @@ Step 7
 * exonerateAt.job
 * exoneratePp.job
 
+Each of these jobs does map the protein sequences to the masked draft genome.
+
+* exonerate-merge-to-hints.job
+
+collects all the output file of the exonerateAt.job and exoneratePp.job
+and converts to hint file.  The output files are identified by the name exonerate??.job.o*.
+
+### Convert repeatmasker output to hints.
+
+* rm2hints.job
+
 ### Construct combined hint data.
+
 * mergehints.job
 
 ### Run Augustus on split genome
@@ -154,10 +176,6 @@ These output in gff2 format whereas the above is configured to write gff3 format
 
 ## unexplained
 ```
-exclude_intron_map.sh
-discard_intron_map.job
-merge2.job
+* exclude_intron_map.sh
 s15optimize_augustus.job
-exonerate-merge-to-hints.job
-rm2hints.job
 ```
